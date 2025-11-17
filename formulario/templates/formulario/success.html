@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Incidente Registrado</title>
+    <style>
+        body {
+            text-align: center;
+            font-family: Arial;
+            padding-top: 90px;
+            background: #f4f4f4;
+        }
+        .card {
+            background: white;
+            display: inline-block;
+            padding: 40px 70px;
+            border-radius: 12px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        a {
+            display: inline-block;
+            margin-top: 25px;
+            color: #0066ff;
+            text-decoration: none;
+            font-size: 16px;
+        }
+    </style>
+</head>
+
+<body>
+<div class="card">
+<h2>Incidente enviado con éxito</h2>
+<h3>Código de incidente:</h3>
+<h1>{{ incidente.codigo }}</h1>
+
+<p>Gracias por registrar el incidente.</p>
+<p>Por favor guarda este código para evaluar futuros incidentes.</p>
+
+
+    <a href="{% url 'form_incidente' %}">Ingresar otro incidente</a>
+</div>
+</body>
+</html>

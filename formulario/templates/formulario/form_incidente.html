@@ -1,0 +1,129 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Registro de Incidente</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 30px;
+            background: #f4f4f4;
+        }
+        .container {
+            max-width: 650px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 0 12px rgba(0,0,0,0.1);
+        }
+        label { font-weight: bold; margin-top: 15px; display: block; }
+        input, select, textarea {
+            padding: 10px;
+            margin-top: 4px;
+            border: 1px solid #bbb;
+            border-radius: 6px;
+        }
+        .checkbox-group label {
+            font-weight: normal;
+            display: flex;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+        .other-box {
+            margin-top: 10px;
+            padding-left: 25px;
+        }
+        button {
+            margin-top: 25px;
+            padding: 12px 20px;
+            background: #0066ff;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover { background: #0050cc; }
+
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            align-items: start;
+        }
+    </style>
+
+</head>
+
+<body>
+<div class="container">
+
+    <h2>Registro de Incidente</h2>
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        {{ form.non_field_errors }}
+
+        {# Campos normales #}
+        {% for field in form %}
+    {% if field.name != "acciones" and field.name != "accion_otro_texto" %}
+        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+        {{ field }}
+        {{ field.errors }}
+    {% endif %}
+{% endfor %}
+
+
+        {# Acciones con checkbox #}
+        <label>Acciones tomadas</label>
+
+        <div class="checkbox-group">
+            {% for value, label in form.fields.acciones.choices %}
+                <label>
+                    <input type="checkbox"
+                        name="acciones"
+                        value="{{ value }}"
+                        id="id_acciones_{{ value }}"
+                        {% if value in form.initial.acciones %}checked{% endif %}>
+                    {{ label }}
+                </label>
+            {% endfor %}
+        </div>
+
+        {# Input oculto que se muestra solo si se marca "otro" #}
+        <div id="otro_texto_box" class="other-box" style="display:none;">
+            <label for="id_accion_otro_texto">Describe la acción "otro"</label>
+            {{ form.accion_otro_texto }}
+            {{ form.accion_otro_texto.errors }}
+        </div>
+
+        <button type="submit">Enviar</button>
+
+    </form>
+
+</div>
+
+<script>
+    const checkOtro = document.getElementById("id_acciones_otro");
+    const boxOtro = document.getElementById("otro_texto_box");
+
+    function actualizar() {
+        if (checkOtro && checkOtro.checked) {
+            boxOtro.style.display = "block";
+        } else {
+            boxOtro.style.display = "none";
+        }
+    }
+
+    if (checkOtro) {
+        checkOtro.addEventListener("change", actualizar);
+        actualizar(); // ejecutar al cargar
+    }
+</script>
+
+</body>
+</html>
