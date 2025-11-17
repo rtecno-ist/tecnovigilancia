@@ -1,0 +1,64 @@
+<!-- formulario/templates/formulario/lista_incidentes.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Incidentes</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        a { text-decoration: none; color: blue; }
+    </style>
+</head>
+<body>
+    <h1>Lista de Incidentes</h1>
+    <a href="{% url 'registrar_incidente' %}">Registrar nuevo incidente</a>
+    <br><br>
+    {% if incidentes %}
+    <table>
+        <thead>
+            <tr>
+                <th>Código</th>
+                <th>Nombre</th>
+                <th>Área</th>
+                <th>Fecha</th>
+                <th>Hora</th>
+                <th>Qué ocurrió</th>
+                <th>Acciones</th>
+                <th>Archivo</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for incidente in incidentes %}
+            <tr>
+                <td>{{ incidente.codigo }}</td>
+                <td>{{ incidente.nombre }}</td>
+                <td>{{ incidente.get_area_display }}</td>
+                <td>{{ incidente.fecha }}</td>
+                <td>{{ incidente.hora }}</td>
+                <td>{{ incidente.get_que_ocurrio_display }}</td>
+                <td>
+                    {% for accion in incidente.acciones %}
+                        {{ accion }}{% if not forloop.last %}, {% endif %}
+                    {% empty %}
+                        -
+                    {% endfor %}
+                </td>
+                <td>
+                    {% if incidente.archivo_adjunto %}
+                        <a href="{{ incidente.archivo_adjunto.url }}" target="_blank">Ver archivo</a>
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <p>No hay incidentes registrados.</p>
+    {% endif %}
+</body>
+</html>

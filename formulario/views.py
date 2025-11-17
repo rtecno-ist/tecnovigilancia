@@ -23,3 +23,6 @@ def success(request, pk):
     incidente = get_object_or_404(Incidente, pk=pk)
     return render(request, "formulario/success.html", {"incidente": incidente})
 
+def lista_incidentes(request):
+    incidentes = Incidente.objects.all().order_by('-fecha', '-hora')
+    return render(request, 'formulario/lista_incidentes.html', {'incidentes': incidentes})
